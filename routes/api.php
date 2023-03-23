@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoriesController;
 use App\Http\Controllers\Api\IncomeController;
+use App\Http\Controllers\Api\ExpenseController;
+
 
 
 
@@ -31,6 +33,9 @@ Route::group(["middleware" => ["auth:sanctum"]], function(){
     
     //add income
     Route::post("income/add", [IncomeController::class, "addIncome"]);
+
+    // add expesne
+    Route::post("expense/add", [ExpenseController::class, "addExpense"]);
 
 });
 
