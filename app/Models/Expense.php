@@ -18,7 +18,8 @@ class Expense extends Model
         'user_email',
         'expense_category',
         'amount',
+        'is_income',
         'date',
-        'time',
+        'expense_name',
     ];
 }

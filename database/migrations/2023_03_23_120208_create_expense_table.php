@@ -18,7 +18,8 @@ return new class extends Migration {
             $table->string('expense_category', 50);
             $table->string('amount', 50);
             $table->string('date', 50);
-            $table->string('time', 50);
+            $table->string('expense_name', 50);
+            $table->string('is_income', 10);
             $table->timestamps();
         });
     }

@@ -8,11 +8,6 @@ use App\Http\Controllers\Api\IncomeController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\TransactionController;
 
-
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,32 +23,34 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(["middleware" => ["auth:sanctum"]], function(){
+Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('profile/get', [AuthController::class, 'profile']);
     Route::post('profile/update', [AuthController::class, 'update']);
     Route::get('logout', [AuthController::class, 'logout']);
-    
+
     //add income
-    Route::post("income/add", [IncomeController::class, "addIncome"]);
-    
+    Route::post('income/add', [IncomeController::class, 'addIncome']);
+    Route::get('income/get', [IncomeController::class, 'getIncome']);
 
     // add expesne
-    Route::post("expense/add", [ExpenseController::class, "addExpense"]);
+    Route::post('expense/add', [ExpenseController::class, 'addExpense']);
+    Route::get('expense/get', [ExpenseController::class, 'getExpense']);
 
     //transactions
-    Route::get("allTransactions", [TransactionController::class, "getTransations"]);
-
-
+    Route::get('allTransactions', [
+        TransactionController::class,
+        'getTransations',
+    ]);
 });
 
 //auth
-Route::post("register", [AuthController::class, "register"]);
+Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
 //categories
 Route::post('category/add', [CategoriesController::class, 'addCategorey']);
 Route::get('category/get', [CategoriesController::class, 'getCategories']);
-Route::get('category/delete', [CategoriesController::class, 'deleteCategories']);
-
-
-
+Route::get('category/delete', [
+    CategoriesController::class,
+    'deleteCategories',
+]);

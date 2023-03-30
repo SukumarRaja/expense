@@ -12,9 +12,10 @@ class IncomeController extends Controller
     public function addIncome(Request $request)
     {
         $data = $request->validate([
-            'category_name' => 'required',
+            'income_name' => 'required',
             'amount' => 'required|min:2',
             'date' => 'required',
+            'is_income'=> 'required',
             'user_id' => '',
             'user_name' => '',
             'user_email' => '',
@@ -27,15 +28,29 @@ class IncomeController extends Controller
             'user_id' => $token,
             'user_name' => $name,
             'user_email' => $email,
-            'category_name' => $data['category_name'],
+            'income_name' => $data['income_name'],
             'amount' => $data['amount'],
             'date' => $data['date'],
+            'is_income' => $data['is_income'],
+
         ]);
 
         return response()->json([
             'status' => 200,
             'message' => 'Income Added Successfully',
             'data' => $income,
+        ]);
+    }
+
+
+    public function getIncome()
+    {
+        $user_id = auth()->user()->id;
+        $in = Income::where(['user_id' => $user_id])->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully get all income',
+            'data' => $expense,
         ]);
     }
 }

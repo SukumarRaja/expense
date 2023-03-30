@@ -13,9 +13,10 @@ class Income extends Model
     protected $table = 'income';
 
     protected $fillable = [
-        'category_name',
+        'income_name',
         'amount',
         'date',
+        'is_income',
         'user_id',
         'user_name',
         'user_email',

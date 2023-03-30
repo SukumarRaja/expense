@@ -16,7 +16,8 @@ class ExpenseController extends Controller
             'expense_category' => 'required',
             'amount' => 'required',
             'date' => 'required',
-            'time' => 'required',
+            'expense_name' => 'required',
+            'is_income' => 'required',
         ]);
 
         //create
@@ -32,12 +33,24 @@ class ExpenseController extends Controller
             'expense_category' => $data['expense_category'],
             'amount' => $data['amount'],
             'date' => $data['date'],
-            'time' => $data['time'],
+            'expense_name' => $data['expense_name'],
+            'is_income' => $data['is_income'],
         ]);
 
         return response()->json([
             'status' => 200,
             'message' => 'Expense Created Successfully',
+            'data' => $expense,
+        ]);
+    }
+
+    public function getExpense()
+    {
+        $user_id = auth()->user()->id;
+        $expense = Expense::where(['user_id' => $user_id])->paginate(10);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully get all expenses',
             'data' => $expense,
         ]);
     }

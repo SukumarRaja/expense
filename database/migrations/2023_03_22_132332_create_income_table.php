@@ -15,9 +15,10 @@ return new class extends Migration {
             $table->string('user_id', 20);
             $table->string('user_name', 50);
             $table->string('user_email', 50);
-            $table->string('category_name', 150);
+            $table->string('income_name', 150);
             $table->string('amount', 150);
             $table->string('date', 150);
+            $table->string('is_income', 10);
             $table->timestamps();
         });
     }
