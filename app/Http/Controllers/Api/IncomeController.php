@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Income;
+use App\Models\Expense;
 use App\Models\User;
+use Carbon\Carbon;
 
 class IncomeController extends Controller
 {
@@ -15,7 +17,7 @@ class IncomeController extends Controller
             'income_name' => 'required',
             'amount' => 'required|min:2',
             'date' => 'required',
-            'is_income'=> 'required',
+            'is_income' => 'required',
             'user_id' => '',
             'user_name' => '',
             'user_email' => '',
@@ -32,7 +34,6 @@ class IncomeController extends Controller
             'amount' => $data['amount'],
             'date' => $data['date'],
             'is_income' => $data['is_income'],
-
         ]);
 
         return response()->json([
@@ -42,7 +43,6 @@ class IncomeController extends Controller
         ]);
     }
 
-
     public function getIncome()
     {
         $user_id = auth()->user()->id;
@@ -50,7 +50,26 @@ class IncomeController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Successfully get all income',
-            'data' => $expense,
+            'data' => $in,
+        ]);
+    }
+
+    public function getMonthlyWiseIncome(Request $request)
+    {
+        $data = $request->validate([
+            'month' => 'required',
+            'year' => 'required',
+        ]);
+        $user_id = auth()->user()->id;
+        $data = Income::where(['user_id' => $user_id])
+            ->whereMonth('date', '=', $data['month'])
+            ->whereYear('date', '=', $data['year'])
+            ->paginate(10);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully get monthly income',
+            'data' => $data,
         ]);
     }
 }
