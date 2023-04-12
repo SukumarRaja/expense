@@ -39,6 +39,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // add expesne
     Route::post('expense/add', [ExpenseController::class, 'addExpense']);
     Route::get('expense/get', [ExpenseController::class, 'getExpense']);
+    Route::get('expense/getMonthly', [
+        ExpenseController::class,
+        'getMonthlyWiseExpense',
+    ]);
 
     //transactions
     Route::get('allTransactions', [

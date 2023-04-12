@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Expense;
 use App\Models\User;
+use App\Models\Income;
+use DB;
 
 class ExpenseController extends Controller
 {
@@ -52,6 +54,53 @@ class ExpenseController extends Controller
             'status' => 200,
             'message' => 'Successfully get all expenses',
             'data' => $expense,
+        ]);
+    }
+
+    public function getMonthlyWiseExpense(Request $request)
+    {
+        $data = $request->validate([
+            'month' => 'required',
+            'year' => 'required',
+        ]);
+        $user_id = auth()->user()->id;
+
+        $income = Income::select('amount')
+            ->where('user_id', '=', $user_id)
+            ->whereMonth('date', '=', $data['month'])
+            ->whereYear('date', '=', $data['year'])
+            ->get();
+        $mi = $income->sum('amount');
+
+        $expense = Expense::select('amount')
+            ->where('user_id', '=', $user_id)
+            ->whereMonth('date', '=', $data['month'])
+            ->whereYear('date', '=', $data['year'])
+            ->get();
+        $me = $expense->sum('amount');
+
+        $c_e_amount = Expense::select(
+            'expense_category',
+            DB::raw('SUM(amount) as amount')
+        )
+            ->where('user_id', '=', $user_id)
+            ->whereMonth('date', '=', $data['month'])
+            ->whereYear('date', '=', $data['year'])
+            ->groupBy('expense_category')
+            ->get();
+
+        $data = Expense::where(['user_id' => $user_id])
+            ->whereMonth('date', '=', $data['month'])
+            ->whereYear('date', '=', $data['year'])
+            ->paginate(10);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Successfully get monthly expense',
+            'monthly_income' => $mi,
+            'monthly_expense' => $me,
+            'category_expense_amount' => $c_e_amount,
+            'data' => $data,
         ]);
     }
 }

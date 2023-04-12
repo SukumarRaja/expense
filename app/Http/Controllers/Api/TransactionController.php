@@ -10,29 +10,33 @@ use Carbon\Carbon;
 
 class TransactionController extends Controller
 {
-    public function getTransations()
+    public function getTransations(Request $request)
     {
+        $data = $request->validate([
+            'date' => 'required',
+        ]);
+
         $user_id = auth()->user()->id;
 
-        $d = Carbon::parse('2023-04-14 00:00:00.000');
-        $dt= Carbon::now();
-        $current_month = $dt->month;
-        $current_year = $dt->year;
-        
-        return $dt->month;
+        // user requested date
+        $parse = Carbon::parse($data['date']);
 
+        // return $date;
         $income = Income::where(['user_id' => $user_id])
-            ->whereDate('date', '=', $data['month'])
-            ->whereMonth('date', '=', $data['year'])
-            ->whereYear('date', '=', $data['year'])
-            ->paginate(10);
-        return $income;
-        return $d->day;
-        $expense = Expense::find($user_id)->all();
+            ->whereDate('date', '=', $parse->format('y-m-d'))
+            ->orderBy('created_at', 'ASC')
+            ->get();
+        $expense = Expense::where(['user_id' => $user_id])
+            ->whereDate('date', '=', $parse->format('y-m-d'))
+            ->orderBy('created_at', 'ASC')
+            ->get();
         $merged = array_merge($income->toArray(), $expense->toArray());
+
         return response()->json([
             'status' => 200,
             'message' => 'Successfully get all transactions',
+            // 'income'=>$income,
+            // // 'expense'=>$expense,
             'data' => $merged,
         ]);
     }
