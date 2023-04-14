@@ -31,18 +31,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //add income
     Route::post('income/add', [IncomeController::class, 'addIncome']);
     Route::get('income/get', [IncomeController::class, 'getIncome']);
-    Route::get('income/getMonthly', [
-        IncomeController::class,
-        'getMonthlyWiseIncome',
-    ]);
 
     // add expesne
     Route::post('expense/add', [ExpenseController::class, 'addExpense']);
     Route::get('expense/get', [ExpenseController::class, 'getExpense']);
-    Route::get('expense/getMonthly', [
-        ExpenseController::class,
-        'getMonthlyWiseExpense',
-    ]);
 
     //transactions
     Route::get('allTransactions', [
@@ -52,6 +44,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('getTotalIncomeAndExpense', [
         TransactionController::class,
         'totalIncomeAndExpense',
+    ]);
+    Route::get('getStatistics', [
+        TransactionController::class,
+        'getMonthlyWiseStatistics',
     ]);
 });
 

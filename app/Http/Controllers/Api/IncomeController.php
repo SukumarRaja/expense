@@ -53,23 +53,4 @@ class IncomeController extends Controller
             'data' => $in,
         ]);
     }
-
-    public function getMonthlyWiseIncome(Request $request)
-    {
-        $data = $request->validate([
-            'month' => 'required',
-            'year' => 'required',
-        ]);
-        $user_id = auth()->user()->id;
-        $data = Income::where(['user_id' => $user_id])
-            ->whereMonth('date', '=', $data['month'])
-            ->whereYear('date', '=', $data['year'])
-            ->paginate(10);
-
-        return response()->json([
-            'status' => 200,
-            'message' => 'Successfully get monthly income',
-            'data' => $data,
-        ]);
-    }
 }
