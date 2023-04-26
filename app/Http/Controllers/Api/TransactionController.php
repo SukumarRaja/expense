@@ -22,11 +22,23 @@ class TransactionController extends Controller
         // user requested date
         $parse = Carbon::parse($data['date']);
 
-        // return $date;
+        $income_amount = Income::select('amount')
+            ->where('user_id', '=', $user_id)
+            ->whereDate('date', '=', $parse->format('y-m-d'))
+            ->get()
+            ->sum('amount');
+
+        $expense_Amount = Expense::select('amount')
+            ->where('user_id', '=', $user_id)
+            ->whereDate('date', '=', $parse->format('y-m-d'))
+            ->get()
+            ->sum('amount');
+
         $income = Income::where(['user_id' => $user_id])
             ->whereDate('date', '=', $parse->format('y-m-d'))
             ->orderBy('created_at', 'ASC')
             ->get();
+
         $expense = Expense::where(['user_id' => $user_id])
             ->whereDate('date', '=', $parse->format('y-m-d'))
             ->orderBy('created_at', 'ASC')
@@ -36,8 +48,8 @@ class TransactionController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Successfully get all transactions',
-            // 'income'=>$income,
-            // // 'expense'=>$expense,
+            'daily_total_income' => $income_amount,
+            'daily_total_expense' => $expense_Amount,
             'data' => $merged,
         ]);
     }
@@ -77,15 +89,15 @@ class TransactionController extends Controller
             ->where('user_id', '=', $user_id)
             ->whereMonth('date', '=', $data['month'])
             ->whereYear('date', '=', $data['year'])
-            ->get();
-        $mi = $income->sum('amount');
+            ->get()
+            ->sum('amount');
 
         $expense = Expense::select('amount')
             ->where('user_id', '=', $user_id)
             ->whereMonth('date', '=', $data['month'])
             ->whereYear('date', '=', $data['year'])
-            ->get();
-        $me = $expense->sum('amount');
+            ->get()
+            ->sum('amount');
 
         $c_e_amount = Expense::select(
             'expense_category',
@@ -105,8 +117,8 @@ class TransactionController extends Controller
         return response()->json([
             'status' => 200,
             'message' => 'Successfully get monthly expense',
-            'monthly_income' => $mi,
-            'monthly_expense' => $me,
+            'monthly_income' => $income,
+            'monthly_expense' => $expense,
             'category_expense_amount' => $c_e_amount,
             'data' => $data,
         ]);

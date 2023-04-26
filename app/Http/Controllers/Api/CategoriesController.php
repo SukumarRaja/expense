@@ -12,12 +12,18 @@ class CategoriesController extends Controller
     {
         //validate
         $data = $request->validate([
-            "category_name"=>"required|unique:categories",
+            'category_name' => 'required|unique:categories',
+            // 'image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
         ]);
-
-        //create
+        // $imageName = null;
+        // if ($request->hasFile('image')) {
+        //     $images = $request->file('image');
+        //     $imageName = time() . '.' . $images->extension();
+        //     $path = $request->file('image')->storeAs('images', $imageName);
+        // }
         $category = Categories::create([
             'category_name' => $data['category_name'],
+            // 'image' => $path,
         ]);
 
         return response()->json(
