@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CategoriesController;
 use App\Http\Controllers\Api\IncomeController;
 use App\Http\Controllers\Api\ExpenseController;
 use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\BugReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         TransactionController::class,
         'getMonthlyWiseStatistics',
     ]);
+
+    //Bug Report
+    Route::post('bug/create', [BugReportController::class, 'createBug']);
 });
 
 //auth
