@@ -57,5 +57,42 @@ class ExpenseController extends Controller
         ]);
     }
 
-   
+    public function deleteExpense(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+        ]);
+        if (auth()->user()) {
+            $data = Expense::find($request['id']);
+            if ($data != null) {
+                $data->delete();
+                $list = Expense::all()->toArray();
+                return response()->json(
+                    [
+                        'status' => 200,
+                        'message' => 'Successfully delete expense',
+                        'data' => $list,
+                    ],
+                    200
+                );
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' =>
+                            'Already expense deleted or no data found',
+                    ],
+                    404
+                );
+            }
+        } else {
+            return response()->json(
+                [
+                    'status' => 401,
+                    'message' => 'Unauthorized or user deleted',
+                ],
+                401
+            );
+        }
+    }
 }

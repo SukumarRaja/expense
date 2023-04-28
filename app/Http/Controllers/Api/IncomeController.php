@@ -53,4 +53,42 @@ class IncomeController extends Controller
             'data' => $in,
         ]);
     }
+
+    public function deleteIncome(Request $request)
+    {
+        $request->validate([
+            'id' => 'required',
+        ]);
+        if (auth()->user()) {
+            $data = Income::find($request['id']);
+            if ($data != null) {
+                $data->delete();
+                $list = Income::all()->toArray();
+                return response()->json(
+                    [
+                        'status' => 200,
+                        'message' => 'Successfully delete income',
+                        'data' => $list,
+                    ],
+                    200
+                );
+            } else {
+                return response()->json(
+                    [
+                        'status' => 404,
+                        'message' => 'Already income deleted or no data found',
+                    ],
+                    404
+                );
+            }
+        } else {
+            return response()->json(
+                [
+                    'status' => 401,
+                    'message' => 'Unauthorized or user deleted',
+                ],
+                401
+            );
+        }
+    }
 }

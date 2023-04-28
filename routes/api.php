@@ -31,10 +31,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     //add income
     Route::post('income/add', [IncomeController::class, 'addIncome']);
     Route::get('income/get', [IncomeController::class, 'getIncome']);
+    Route::post('income/delete', [IncomeController::class, 'deleteIncome']);
 
     // add expesne
     Route::post('expense/add', [ExpenseController::class, 'addExpense']);
     Route::get('expense/get', [ExpenseController::class, 'getExpense']);
+    Route::post('expense/delete', [ExpenseController::class, 'deleteExpense']);
 
     //transactions
     Route::get('allTransactions', [
