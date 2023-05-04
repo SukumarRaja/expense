@@ -15,7 +15,9 @@ class BugReportController extends Controller
         $data = $request->validate([
             'title' => 'required',
             'description' => 'required',
-        ]);
+        ]);     
+
+        
 
         //create
         $token = auth()->user()->id;
